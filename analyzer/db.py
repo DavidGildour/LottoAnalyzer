@@ -42,9 +42,9 @@ def init_db():
     with open('wyniki.json', 'r') as f:
         c = db.cursor()
         for record in load(f):
-            c.execute("""INSERT INTO results (id, data, lotto, plus) VALUES (?, ?, ?, ?);""",
+            c.execute("""INSERT INTO lotto (id, date, lotto, plus) VALUES (?, ?, ?, ?);""",
                       (record["draw_id"],
-                       record["data"],
+                       record["date"],
                        " ".join(record["lotto"]),
                        " ".join(record["plus"])))
 

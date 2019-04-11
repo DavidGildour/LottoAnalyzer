@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS results;
 
-CREATE TABLE results(
+CREATE TABLE lotto(
     id INTEGER PRIMARY KEY NOT NULL,
-    data TEXT NOT NULL,
+    date TEXT NOT NULL,
     lotto TEXT NOT NULL,
     plus TEXT
 );

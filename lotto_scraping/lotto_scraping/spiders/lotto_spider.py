@@ -44,7 +44,7 @@ class LottoSpider(Spider):
             if not latest or latest > draw_id:
                 Control.result.append({
                     "draw_id": draw_id,
-                    "data": result.css("td.wyn2::text").get(),
+                    "date": result.css("td.wyn2::text").get(),
                     "lotto": result.css("td.wyn3 ul.showdl li::text").getall(),
                     "plus": result.css("td.wyn3 ul.lplus.showlp li::text").getall(),
                 })
