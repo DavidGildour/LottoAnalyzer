@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS results;
+
+CREATE TABLE results(
+    id INTEGER PRIMARY KEY NOT NULL,
+    data TEXT NOT NULL,
+    numbers TEXT NOT NULL
+);
+
