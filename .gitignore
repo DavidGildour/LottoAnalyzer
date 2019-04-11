@@ -1,5 +1,8 @@
 venv/
 .idea/
+instance/
 
 *.pyc
 __pycache__/
+
+*.json
