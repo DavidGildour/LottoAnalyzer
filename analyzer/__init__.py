@@ -2,13 +2,15 @@ import os
 
 from flask import Flask
 
+from analyzer.dburi import DbURI
+
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'lotto.sqlite')
+        DATABASE=DbURI.conn_string,
     )
 
     if not test_config:
@@ -26,8 +28,8 @@ def create_app(test_config=None):
     def index():
         return '<h1>Oi, mates!</h1>'
 
-    from . import db
-    db.init_app(app)
+    from . import postgres_db
+    postgres_db.init_app(app)
 
     from . import lotto
     app.register_blueprint(lotto.bp)

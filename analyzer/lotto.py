@@ -5,7 +5,7 @@ from flask import (
 )
 # from random import randint
 
-from analyzer.db import get_db
+from analyzer.postgres_db import get_db
 
 bp = Blueprint('lotto', __name__, url_prefix='/lotto')
 
@@ -30,11 +30,11 @@ def date():
 
     searched_date = ".".join([day, month, year])
 
-    db.execute("SELECT id, date, l1||l2||l3||l4||l5||l6 AS lotto, "
-               "p1||p2||p3||p4||p5||p6 AS plus FROM lotto WHERE date LIKE ?", (searched_date,))
+    db.execute("SELECT id, date, CONCAT_WS(' ', l1, l2, l3, l4, l5, l6) AS lotto, "
+               "CONCAT_WS(' ', p1, p2, p3, p4, p5, p6) AS plus FROM lotto WHERE date LIKE %s", (searched_date,))
     results = db.fetchall()
 
-    return render_template('lotto/search_results.html', results=results or [])
+    return render_template('lotto/search_results.html', results=results or [], size=len(results))
 
 
 @bp.route('/numbers')
