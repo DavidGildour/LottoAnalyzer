@@ -20,6 +20,7 @@ def get_db():
 
             g.db.autocommit = True
         except psycopg2.OperationalError:
+            print("Connection failed, creating new db.")
             conn = psycopg2.connect(
                 "postgres://postgres:postgres@localhost/postgres"
             )
