@@ -3,7 +3,17 @@ DROP TABLE IF EXISTS lotto;
 CREATE TABLE lotto(
     id INTEGER PRIMARY KEY NOT NULL,
     date TEXT NOT NULL,
-    lotto TEXT NOT NULL,
-    plus TEXT
+    l1 TEXT NOT NULL,
+    l2 TEXT NOT NULL,
+    l3 TEXT NOT NULL,
+    l4 TEXT NOT NULL,
+    l5 TEXT NOT NULL,
+    l6 TEXT NOT NULL,
+    p1 TEXT,
+    p2 TEXT,
+    p3 TEXT,
+    p4 TEXT,
+    p5 TEXT,
+    p6 TEXT
 );
 

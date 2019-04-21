@@ -28,7 +28,7 @@ class Control:
 class LottoSpider(Spider):
     name = "lotto"
     start_urls = [
-        'https://www.multipasko.pl/wyniki-lotto/duzy-lotek/',
+        'https://www.multipasko.pl/wyniki-lotto/duzy-lotek/100',
     ]
 
     def parse(self, response):
@@ -42,11 +42,14 @@ class LottoSpider(Spider):
             latest = Control.get_latest()
 
             if not latest or latest > draw_id:
+                lotto = list(map(str.strip, result.css("td.wyn3 ul.showdl li::text").getall()))
+                plus = list(map(str.strip, result.css("td.wyn3 ul.lplus.showlp li::text").getall()))
+
                 Control.result.append({
                     "draw_id": draw_id,
                     "date": result.css("td.wyn2::text").get(),
-                    "lotto": result.css("td.wyn3 ul.showdl li::text").getall(),
-                    "plus": result.css("td.wyn3 ul.lplus.showlp li::text").getall(),
+                    "lotto": lotto,
+                    "plus": plus if plus else ['', '', '', '', '', ''],
                 })
             else:
                 Control.stop_running()
