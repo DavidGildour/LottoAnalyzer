@@ -2,7 +2,7 @@ import psycopg2
 import click
 
 from scrapy.crawler import CrawlerProcess
-from lotto_scraping.lotto_scraping.spiders.lotto_spider import LottoSpider
+from lotto_scraping.lotto_scraping.spiders import lotto_spider, multi_spider
 from json import load
 
 from flask import g, current_app
@@ -50,16 +50,25 @@ def init_db():
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
-    process.crawl(LottoSpider)
+    process.crawl(lotto_spider.LottoSpider)
+    process.crawl(multi_spider.MultiSpider)
     process.start()
 
-    with open('wyniki.json', 'r') as f:
+    with open('wyniki_lotto.json', 'r') as f:
         for record in load(f):
             c.execute("""INSERT INTO lotto VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""",
                       (record["draw_id"],
                        record["date"],
                        *record["lotto"],
                        *record["plus"]))
+
+    with open('wyniki_multi.json', 'r') as f:
+        for record in load(f):
+            c.execute("INSERT INTO multi VALUES (" + ("%s,"*22) + "%s);",
+                      (record["draw_id"],
+                       record["date"],
+                       *record["multi"],
+                       record["plus"]))
 
     c.close()
     db.close()
