@@ -15,6 +15,8 @@
         <input type="text" name="month" id="month" placeholder="MM">
         <input type="text" name="year" id="year" placeholder="YYYY">
         <input type="submit" value="Search"><br>
+    </form>
+    <form action="{{ url_for('lotto.numbers') }}">
         <label for="numbers">Numbers: </label>
         <input name="numbers" id="numbers">
         <input type="submit" value="Search">
