@@ -59,5 +59,5 @@ class LottoSpider(Spider):
             next_page = response.urljoin(f'''wyniki-lotto/duzy-lotek/sortowane/{str(current_page - 25)}''')
             yield Request(next_page, callback=self.parse)
         else:
-            with open('wyniki.json', 'w') as f:
+            with open('wyniki_lotto.json', 'w') as f:
                 dump(Control.result, f)
