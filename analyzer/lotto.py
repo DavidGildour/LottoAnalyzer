@@ -4,7 +4,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 # from random import randint
-
+import analyzer.search_logic as search_logic
 from analyzer.postgres_db import get_db
 
 bp = Blueprint('lotto', __name__, url_prefix='/lotto')
@@ -39,5 +39,7 @@ def date():
 
 @bp.route('/numbers')
 def numbers():
+    searched_numbers = request.args.get('numbers')
+    results = search_logic.get_results_by_numbers(searched_numbers)
 
-    return render_template('lotto/search_results.html', results=[])
+    return render_template('lotto/search_results.html', results=results)
