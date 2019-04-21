@@ -4,5 +4,6 @@ instance/
 
 *.pyc
 __pycache__/
+analyzer/dburi.py
 
 *.json
