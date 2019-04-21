@@ -36,6 +36,9 @@
                 <td>Date</td>
                 <td>Lotto</td>
                 <td>Plus</td>
+                {% if 'typ' in results[0].keys() %}
+                    <td>Found in:</td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -45,6 +48,9 @@
                 <td>{{ result.date }}</td>
                 <td>{{ result.lotto }}</td>
                 <td>{{ result.plus }}</td>
+            {% if 'typ' in result %}
+                <td>{{ result.typ }}</td>
+            {% endif %}
             </tr>
             {% endfor %}
         </tbody>
