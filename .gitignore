@@ -1,8 +1,9 @@
-venv/
+env/
 .idea/
 instance/
 
 *.pyc
 __pycache__/
+analyzer/dburi.py
 
 *.json
