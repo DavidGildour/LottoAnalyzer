@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block title %} Lotto Plus {% endblock %}
+
+{% block header %}
+{% if latest %}<h3>Latest results in database: {{ latest }}</h3>{% endif %}
+<h2>Search by:</h2>
+{% endblock %}
+
+{% block content %}
+<div>
+    <form action="{{ url_for('lotto.date') }}">
+        Date:&nbsp;
+        <input type="text" name="day" id="day" placeholder="DD">
+        <input type="text" name="month" id="month" placeholder="MM">
+        <input type="text" name="year" id="year" placeholder="YYYY">
+        <input type="submit" value="Search"><br>
+        <label for="numbers">Numbers: </label>
+        <input name="numbers" id="numbers">
+        <input type="submit" value="Search">
+    </form>
+</div>
+{% if results %}
+<div>
+    <table border="1px solid black">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Date</td>
+                <td>Lotto</td>
+                <td>Plus</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.id }}</td>
+                <td>{{ result.date }}</td>
+                <td>{{ result.lotto }}</td>
+                <td>{{ result.plus }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

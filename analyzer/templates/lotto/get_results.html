@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %} Lotto Plus {% endblock %}
+
+{% block content %}
+
+<div>
+    Random lotto draw:
+    <ul>
+        <li>Date: {{ latest.date }}</li>
+        <li>Lotto: {{ latest.lotto }}</li>
+        <li>Plus: {% if latest.plus %} {{ latest.plus }} {% else %} N/A {% endif %}</li>
+    </ul>
+</div>
+
+{% endblock %}
