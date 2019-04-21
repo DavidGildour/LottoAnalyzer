@@ -28,7 +28,7 @@ class Control:
 class LottoSpider(Spider):
     name = "lotto"
     start_urls = [
-        'https://www.multipasko.pl/wyniki-lotto/duzy-lotek/100',
+        'https://www.multipasko.pl/wyniki-lotto/duzy-lotek/',
     ]
 
     def parse(self, response):
