@@ -1,8 +1,7 @@
 {% extends 'layout.html' %}
 
-{% block title %} Lotto Plus {% endblock %}
-
 {% block header %}
+<h3>{% block title %} Lotto Plus {% endblock %}</h3>
 {% if latest %}<h3>Latest results in database: {{ latest }}</h3>{% endif %}
 <h2>Search by:</h2>
 {% endblock %}
