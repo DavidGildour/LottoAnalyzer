@@ -5,7 +5,7 @@ from flask import (
 )
 # from random import randint
 import analyzer.search_logic as search_logic
-from analyzer.postgres_db import get_db
+from analyzer.postgres_db import get_db, update_db
 
 bp = Blueprint('lotto', __name__, url_prefix='/lotto')
 
@@ -18,6 +18,13 @@ def index():
     latest = db.fetchone()["date"]
 
     return render_template('lotto/search_results.html', latest=latest)
+
+
+@bp.route('/update')
+def update():
+    update_db('lotto')
+
+    return redirect(url_for('lotto.index'))
 
 
 @bp.route('/date')
@@ -42,4 +49,4 @@ def numbers():
     searched_numbers = request.args.get('numbers')
     results = search_logic.get_results_by_numbers(searched_numbers)
 
-    return render_template('lotto/search_results.html', results=results)
+    return render_template('lotto/search_results.html', results=results, size=len(results))

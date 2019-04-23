@@ -1,12 +1,22 @@
 import psycopg2
 import click
 
-from scrapy.crawler import CrawlerProcess
+from twisted.internet import reactor
+from scrapy.crawler import CrawlerProcess, CrawlerRunner
 from lotto_scraping.lotto_scraping.spiders import lotto_spider, multi_spider
 from json import load
 
 from flask import g, current_app
 from flask.cli import with_appcontext
+
+SPIDERS = {
+    'lotto': lotto_spider,
+    'multi': multi_spider,
+}
+
+STATEMENT = {
+    'lotto': 'SELECT id FROM lotto ORDER BY id DESC LIMIT 1',
+}
 
 
 def get_db():
@@ -69,6 +79,35 @@ def init_db():
                        record["date"],
                        *record["multi"],
                        record["plus"]))
+
+    c.close()
+    db.close()
+
+
+def update_db(lottery: str):
+    db = get_db()
+    c = db.cursor()
+
+    c.execute(STATEMENT[lottery])
+    latest = c.fetchone()["id"]
+
+    spider = SPIDERS[lottery]
+    spider.Control.set_latest(int(latest))
+
+    runner = CrawlerRunner()
+    runner.crawl(spider.LottoSpider).addBoth(lambda _: reactor.stop())
+    reactor.run()
+
+    with open('wyniki_lotto.json', 'r') as f:
+        count = 0
+        for record in load(f):
+            count += 1
+            c.execute("""INSERT INTO lotto VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""",
+                      (record["draw_id"],
+                       record["date"],
+                       *record["lotto"],
+                       *record["plus"]))
+        print(f"Added {count} records.")
 
     c.close()
     db.close()
