@@ -31,8 +31,8 @@ def create_app(test_config=None):
     from . import postgres_db
     postgres_db.init_app(app)
 
-    from . import lotto
+    from .bps import lotto, multi
     app.register_blueprint(lotto.bp)
+    app.register_blueprint(multi.bp)
 
     return app
-
