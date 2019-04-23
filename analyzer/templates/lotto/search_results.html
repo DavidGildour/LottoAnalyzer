@@ -2,7 +2,12 @@
 
 {% block header %}
 <h3>{% block title %} Lotto Plus {% endblock %}</h3>
-{% if latest %}<h3>Latest results in database: {{ latest }}</h3>{% endif %}
+{% if latest %}
+<h3>Latest results in database: {{ latest }}</h3>
+<form action="{{ url_for('lotto.update') }}">
+    <input type="submit" value="Update DB">
+</form>
+{% endif %}
 <h2>Search by:</h2>
 {% endblock %}
 
@@ -26,7 +31,7 @@
     <table border="1px solid black">
         <thead>
             <tr>
-                <td colspan="4">
+                <td colspan="{% if 'typ' in results[0].keys() %}5{% else %}4{% endif %}">
                     Records found: {{ size }}
                 </td>
             </tr>
