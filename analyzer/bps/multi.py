@@ -30,11 +30,12 @@ def date():
 
     searched_date = ".".join([day, month, year])
 
-    db.execute("SELECT id, date, CONCAT_WS(' ', l1, l2, l3, l4, l5, l6) AS lotto, "
-               "CONCAT_WS(' ', p1, p2, p3, p4, p5, p6) AS plus FROM lotto WHERE date LIKE %s", (searched_date,))
+    db.execute("SELECT date, plus, CONCAT_WS(' ', m1, m2, m3, m4, m5, m7, m8, m9, m10,"
+               " m11, m12, m13, m14, m15, m16, m17, m18, m19, m20) AS multi "
+               "FROM multi WHERE date LIKE %s", (searched_date,))
     results = db.fetchall()
 
-    return render_template('lotto/search_results.html', results=results or [], size=len(results))
+    return render_template('multi/search_results.html', results=results or [], size=len(results))
 
 
 @bp.route('/numbers')
@@ -42,4 +43,4 @@ def numbers():
     searched_numbers = request.args.get('numbers')
     results = search_logic.get_results_by_numbers(searched_numbers)
 
-    return render_template('lotto/search_results.html', results=results, size=len(results))
+    return render_template('multi/search_results.html', results=results, size=len(results))
