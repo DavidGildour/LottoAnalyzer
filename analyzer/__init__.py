@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 
 from analyzer.dburi import DbURI
 
@@ -26,7 +26,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return '<h1>Oi, mates!</h1>'
+        return render_template('index.html')
 
     from . import postgres_db
     postgres_db.init_app(app)
