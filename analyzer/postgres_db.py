@@ -96,7 +96,7 @@ def update_db(lottery: str):
 
     runner = CrawlerRunner()
     runner.crawl(spider.LottoSpider).addBoth(lambda _: reactor.stop())
-    reactor.run()
+    reactor.run(0)
 
     with open('wyniki_lotto.json', 'r') as f:
         count = 0

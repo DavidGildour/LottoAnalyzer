@@ -41,7 +41,7 @@ class LottoSpider(Spider):
 
             latest = Control.get_latest()
 
-            if not latest or latest > draw_id:
+            if not latest or latest < draw_id:
                 lotto = list(map(str.strip, result.css("td.wyn3 ul.showdl li::text").getall()))
                 plus = list(map(str.strip, result.css("td.wyn3 ul.lplus.showlp li::text").getall()))
 
