@@ -1,6 +1,9 @@
 from scrapy import Spider, Request
-# from datetime import date
 from json import dump
+
+
+def get_spider():
+    return LottoSpider
 
 
 class Control:
@@ -36,8 +39,6 @@ class LottoSpider(Spider):
         current_page = int(results.css("td.nrlos::text").get())
         for result in results:
             draw_id = int(result.css("td.nrlos::text").get())
-
-            # current_date = date(*reversed(list(map(int, data.split('.')))))
 
             latest = Control.get_latest()
 

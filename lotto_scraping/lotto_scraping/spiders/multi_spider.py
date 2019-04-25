@@ -3,6 +3,10 @@ from json import dump
 from re import sub
 
 
+def get_spider():
+    return MultiSpider
+
+
 class Control:
     __latest = None
     __running = True
@@ -44,7 +48,7 @@ class MultiSpider(Spider):
             draw_id = int(draw_ids[i])
             draw_date = "".join(results[i].css("div *::text").getall())
 
-            if not latest or latest > draw_id:
+            if not latest or latest < draw_id:
 
                 plain_html = results[i].get()
                 numbers_start = plain_html.index("</div>") + len("</div>")
