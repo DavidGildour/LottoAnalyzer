@@ -6,6 +6,11 @@
 <h3>Latest results in database: {{ latest }}</h3>
 <form action="{{ url_for('lotto.update') }}">
     <input type="submit" value="Update DB">
+    {% with message = get_flashed_messages() %}
+        {% if message %}
+            <span>{{ message[0] }}</span>
+        {% endif %}
+    {% endwith %}
 </form>
 {% endif %}
 <h2>Search by:</h2>

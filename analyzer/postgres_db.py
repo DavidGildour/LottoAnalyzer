@@ -6,7 +6,7 @@ from scrapy.crawler import CrawlerProcess, CrawlerRunner
 from lotto_scraping.lotto_scraping.spiders import lotto_spider, multi_spider
 from json import load
 
-from flask import g, current_app
+from flask import g, current_app, flash
 from flask.cli import with_appcontext
 
 
@@ -35,7 +35,7 @@ def insert_from_json(cur, table: str, json: str):
                              record["date"],
                              *record["multi"],
                              record["plus"]))
-        print(f"Successfully added {count} records.")
+        flash(f"Successfully added {count} record" + ("s." if count != 1 else "."))
 
 
 def get_db():
