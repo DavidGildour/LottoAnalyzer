@@ -2,7 +2,13 @@
 
 {% block header %}
 <h3>{% block title %} Multi Multi Plus {% endblock %}</h3>
-{% if latest %}<h3>Latest results in database: {{ latest }}</h3>{% endif %}
+{% if latest %}
+<h3>Latest results in database: {{ latest }}</h3>
+<form action="{{ url_for('multi.update') }}">
+    <input type="submit" value="Update DB">
+</form>
+{% endif %}
+
 <h2>Search by:</h2>
 {% endblock %}
 

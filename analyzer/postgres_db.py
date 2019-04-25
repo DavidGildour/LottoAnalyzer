@@ -9,14 +9,33 @@ from json import load
 from flask import g, current_app
 from flask.cli import with_appcontext
 
+
 SPIDERS = {
     'lotto': lotto_spider,
     'multi': multi_spider,
 }
 
-STATEMENT = {
-    'lotto': 'SELECT id FROM lotto ORDER BY id DESC LIMIT 1',
-}
+
+def insert_from_json(cur, table: str, json: str):
+    with open(json, 'r') as f:
+        count = 0
+        if table == "lotto":
+            for record in load(f):
+                count += 1
+                cur.execute("INSERT INTO lotto VALUES (" + ("%s," * 13) + "%s);",
+                            (record["draw_id"],
+                             record["date"],
+                             *record["lotto"],
+                             *record["plus"]))
+        elif table == "multi":
+            for record in load(f):
+                count += 1
+                cur.execute("INSERT INTO multi VALUES (" + ("%s," * 22) + "%s);",
+                            (record["draw_id"],
+                             record["date"],
+                             *record["multi"],
+                             record["plus"]))
+        print(f"Successfully added {count} records.")
 
 
 def get_db():
@@ -64,21 +83,8 @@ def init_db():
     process.crawl(multi_spider.MultiSpider)
     process.start()
 
-    with open('wyniki_lotto.json', 'r') as f:
-        for record in load(f):
-            c.execute("""INSERT INTO lotto VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""",
-                      (record["draw_id"],
-                       record["date"],
-                       *record["lotto"],
-                       *record["plus"]))
-
-    with open('wyniki_multi.json', 'r') as f:
-        for record in load(f):
-            c.execute("INSERT INTO multi VALUES (" + ("%s,"*22) + "%s);",
-                      (record["draw_id"],
-                       record["date"],
-                       *record["multi"],
-                       record["plus"]))
+    insert_from_json(c, 'lotto', 'wyniki_lotto.json')
+    insert_from_json(c, 'multi', 'wyniki_multi.json')
 
     c.close()
     db.close()
@@ -88,26 +94,19 @@ def update_db(lottery: str):
     db = get_db()
     c = db.cursor()
 
-    c.execute(STATEMENT[lottery])
+    c.execute('SELECT id FROM ' + lottery + ' ORDER BY id DESC LIMIT 1')
     latest = c.fetchone()["id"]
 
     spider = SPIDERS[lottery]
     spider.Control.set_latest(int(latest))
 
     runner = CrawlerRunner()
-    runner.crawl(spider.LottoSpider).addBoth(lambda _: reactor.stop())
+    runner.crawl(spider.get_spider()).addBoth(lambda _: reactor.stop())
     reactor.run(0)
 
-    with open('wyniki_lotto.json', 'r') as f:
-        count = 0
-        for record in load(f):
-            count += 1
-            c.execute("""INSERT INTO lotto VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""",
-                      (record["draw_id"],
-                       record["date"],
-                       *record["lotto"],
-                       *record["plus"]))
-        print(f"Added {count} records.")
+    json = 'wyniki_' + lottery + '.json'
+
+    insert_from_json(c, lottery, json)
 
     c.close()
     db.close()

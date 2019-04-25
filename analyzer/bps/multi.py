@@ -5,7 +5,7 @@ from flask import (
 )
 # from random import randint
 import analyzer.search_logic as search_logic
-from analyzer.postgres_db import get_db
+from analyzer.postgres_db import get_db, update_db
 
 bp = Blueprint('multi', __name__, url_prefix='/multi')
 
@@ -18,6 +18,13 @@ def index():
     latest = db.fetchone()["date"]
 
     return render_template('multi/search_results.html', latest=latest)
+
+
+@bp.route('/update')
+def update():
+    update_db('multi')
+
+    return redirect(url_for('multi.index'))
 
 
 @bp.route('/date')
