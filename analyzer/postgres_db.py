@@ -46,8 +46,8 @@ def get_db():
             )
             from psycopg2.extras import RealDictCursor
             g.db.cursor_factory = RealDictCursor
-
             g.db.autocommit = True
+
         except psycopg2.OperationalError:
             print("Connection failed, creating new db.")
             conn = psycopg2.connect(
