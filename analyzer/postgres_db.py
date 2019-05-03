@@ -79,8 +79,10 @@ def init_db():
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
-    process.crawl(lotto_spider.LottoSpider)
-    process.crawl(multi_spider.MultiSpider)
+
+    for spider in SPIDERS.values():
+        process.crawl(spider.get_spider())
+
     process.start()
 
     insert_from_json(c, 'lotto', 'wyniki_lotto.json')
